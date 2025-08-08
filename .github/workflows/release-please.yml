@@ -16,7 +16,7 @@ jobs:
       - uses: googleapis/release-please-action@v4
         id: release_step
         with:
-          token: ${{ secrets.SYK_PERSONAL_GITHUB_ACCESS_TOKEN }}
+          token: ${{ secrets.PERSONAL_GITHUB_ACCESS_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
           target-branch: main
