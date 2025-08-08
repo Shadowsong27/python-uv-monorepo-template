@@ -1,219 +1,118 @@
-# python-standard-template
+# {{project_name}}
 
-A personal flavoured template for Python 3 projects
+{{project_description}}
 
-I need this because there is no one strict way of 
-defining one's project in the Python world.
+## Project Structure
 
-I use the following CLI tools to manage any Python projects.
-
-1. poetry - for dependency management
-2. pyenv - for virutal environment management
-3. pre-commit - for maintaining code standard
-4. bumpversion - for maintaining project semantic versioning
-
-There will be more stuff that comes later, such as the support of 
-dockerization, RestAPI endpoints template etc.
-
-# Installation Instruction
-
-Before taking any further actions, you need to make
- sure you are not in any existing virtual environment. All these packages should
- be installed both in the global Python instead of the project environments
-
-### poetry
-
-Follow the installation Guide here
-
-`https://python-poetry.org/docs/`
-
-After successful installation, to allow command line usage of `poetry`, append
-your PATH variable to make it available for CLI usage.
+This project uses a uv workspace structure:
 
 ```
-export PATH="$PATH:$HOME/.poetry/bin"
+.
+├── apps/
+│   └── {{project_name}}/          # Main application package
+│       ├── src/                   # Source code
+│       ├── tests/                 # Tests
+│       └── pyproject.toml         # Package configuration
+├── .github/
+│   └── workflows/                 # GitHub Actions workflows
+├── pyproject.toml                 # Workspace configuration
+├── release-please-config.json     # Release Please configuration
+├── .release-please-manifest.json  # Release Please manifest
+└── README.md                      # This file
 ```
 
-For windows user, the PATH will be different, please refer to the docs.
+## Development Setup
 
-to your shell configuration file, as stated in the docs or in the `stdout` during installation
+### Prerequisites
 
-run `poetry` in a new shell to check:
+- Python 3.11+
+- [uv](https://docs.astral.sh/uv/) package manager
 
-```
-poetry --version
-```
-It should return something like
+### Installation
 
-```
-Poetry version 1.0.5
-```
-
-### pyenv
-
-`pyenv` makes it easy to install new versions of python, and switch between them.
-
-`pyenv-virtualenv` is a plugin that allows you to switch virtual environment in python easily.
-
----
-
-To install `pyenv` on Mac:
-
-https://github.com/pyenv/pyenv
-
-```
-brew update
-brew install pyenv
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd {{project_name}}
 ```
 
-In case zlib is missing: 
-
-(UPDATE: I am not sure whether this is solved in Big Sur, but it 
-is a problem in Mojave.)
-
-```
-brew install zlib
-export LDFLAGS="-L/usr/local/opt/zlib/lib"
-export CPPFLAGS="-I/usr/local/opt/zlib/include"
-export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
+2. Install dependencies using uv:
+```bash
+uv sync
 ```
 
-In case sqlite 3 does not install:
-
-```
-xcode-select --install
-sudo installer -pkg /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg -target /
+3. Install pre-commit hooks:
+```bash
+uv run pre-commit install
 ```
 
-If that does not solve the issue, look at the original GitHub for more details, it covers the common
-installation problem easily.
+## Usage
 
----
+### Running the Application
 
-To install `pyenv-virtualenv` on Mac:
-
-```
-brew install pyenv-virtualenv
+```bash
+uv run python -m {{project_name}}
 ```
 
-Then add the following lines to your shell profile (e.g. `~/.zshrc`)
+### Running Tests
 
-```
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-```
+```bash
+# Run all tests
+uv run pytest
 
-For Windows user you will need to use a special version of pyenv, look here:
-
-https://github.com/pyenv-win/pyenv-win
-
----
-
-After installation, check
-
-```
-pyenv -v
+# Run tests with coverage
+uv run pytest --cov=src --cov-report=html
 ```
 
-It should return something like
+### Code Quality
 
-```
-pyenv 1.2.11
-```
+```bash
+# Format code
+uv run ruff format
 
-Once this is done, you can create a new virtual environment by running
+# Lint code
+uv run ruff check
 
-```
-pyenv install 3.7.6
-```
-
-To install python 3.7.6 in your computer.
-Note: Python 3.8 will have some compatibility issue with some libraries.
-
-Then create the virtual env by running
-
-```
-pyenv virtualenv 3.7.6
+# Run pre-commit hooks
+uv run pre-commit run --all-files
 ```
 
-And start to build environment by running
+## Development Workflow
 
-```
-poetry add
-poetry install
-```
+1. Create a new branch for your feature/fix
+2. Make your changes
+3. Run tests and ensure they pass
+4. Run code quality checks
+5. Commit your changes (pre-commit hooks will run automatically)
+6. Push your branch and create a pull request
 
-### pre-commit
+## Release Management
 
-```
-pip install pre-commit
-```
+This project uses [Release Please](https://github.com/googleapis/release-please) for automated releases:
 
-and setup the `.pre-commit-config.yaml` file in your project
+- Releases are triggered by merging to the `main` branch
+- Version bumps are determined by conventional commit messages
+- Changelog is automatically generated
+- GitHub releases are created automatically
 
-(This should be automatic once we enabled project template in GitLab)
+### Conventional Commits
 
-Then you will need to install all pre commit hooks before actually using them
+Use conventional commit messages for automatic version bumping:
 
-```
-pre-commit install
-```
+- `feat:` - New features (minor version bump)
+- `fix:` - Bug fixes (patch version bump)
+- `feat!:` or `fix!:` - Breaking changes (major version bump)
+- `docs:`, `style:`, `refactor:`, `test:`, `chore:` - No version bump
 
+## Contributing
 
-### bumpversion
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Ensure all tests pass
+6. Submit a pull request
 
-```
-pip install bumpversion
-```
+## License
 
-and setup the `.bumpversion.cfg` config file
-
-Note: this is an archived project / tool, there might be a better
- tool out there, I know Poetry has its own version bumping functionality
- but I did not further look into it as it is not that usable back then.
- 
-  
-# Design Thoughts;
-
-### Config
-
-The config will be declared by the Environment Variable `PROJECT_ENV`. 
-
-So to toggle the environment, just export a different environment name,
-which should have the same name as the python files under the `src/config/environments`
-folder.
-
-The goal is use a the same names of any configurable variable across
-environments, so we could achieve the switch of environments with 
-just an export statement.
-
-### Constants vs Config
-
-Configs are supposed to be things that are configurable, common 
-configs are placed in `src/config/environments/common.py`.
-
-The constants on the other are some hardcoded values, like 
-the parameter of the earth, the light speed etc. They are NOT
-configurable.
-
-### Customized Exceptions
-
-In a small project we rarely need to define custom exceptions,
-but it might come handy when you have a quite a few layers
-in your system and then you might want to raise an exception
-explicitly tied to a situation.
-
-### manage.py file placement
-
-I use this template mainly for Data projects, i.e. they are 
-mostly a bunch of CLI commands executables, scheduled
-or executed as a long running service. That's why the 
-entry point is always from CLI. I might need to create
-a template for building packages too, and FastAPI projects? 
-Probably there are already some FastAPI projects template on
-Github.
-
-### LICENSE
-
-Added the license because it's on Github. Free to delete
-it when doing a private project.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

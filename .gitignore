@@ -232,3 +232,24 @@ dmypy.json
 .pyre/
 
 # End of https://www.gitignore.io/api/cvs,macos,python,pycharm
+
+# uv
+.python-version
+uv.lock
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE
+.vscode/
+*.swp
+*.swo
+
+# OS generated files
+Thumbs.db
+
+# Project specific
+*.log
+.env.local
+.env.*.local
