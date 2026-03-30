@@ -13,9 +13,6 @@ This project uses a uv workspace structure:
 │       ├── src/                   # Source code
 │       ├── tests/                 # Tests
 │       └── pyproject.toml         # Package configuration
-├── .cline/                        # Cline AI assistant configuration
-│   ├── specs/                     # Project specifications and documentation
-│   └── workspace_rules/           # Workspace-specific rules for Cline
 ├── .github/
 │   └── workflows/                 # GitHub Actions workflows
 ├── pyproject.toml                 # Workspace configuration
@@ -107,18 +104,6 @@ uv run ruff check --fix
 uv run pre-commit run --all-files
 ```
 
-## Cline AI Assistant Integration
-
-This template includes a `.cline/` directory for enhanced AI-assisted development:
-
-- **`.cline/specs/`**: Store project specifications, requirements, and documentation that help Cline understand your project context
-- **`.cline/workspace_rules/`**: Define workspace-specific rules and patterns for Cline to follow
-
-To use with Cline:
-1. Install the [Cline VS Code extension](https://marketplace.visualstudio.com/items?itemName=saoudrizwan.claude-dev)
-2. Add your project specifications to `.cline/specs/`
-3. Configure workspace rules in `.cline/workspace_rules/`
-
 ## Development Workflow
 
 1. Create a new branch for your feature/fix
@@ -149,12 +134,13 @@ mkdir -p apps/new-app/tests
 
 ## Release Management
 
-This project uses [Release Please](https://github.com/googleapis/release-please) for automated releases:
+This project uses [Release Please](https://github.com/googleapis/release-please) for automated releases. The workflow requires a `PERSONAL_GITHUB_ACCESS_TOKEN` secret with `contents: write` and `pull-requests: write` permissions.
 
-- Releases are triggered by merging to the `main` branch
-- Version bumps are determined by conventional commit messages
-- Changelog is automatically generated
-- GitHub releases are created automatically
+### Setting up the token
+
+> **Prompt for your coding agent:**
+>
+> "Please set up the Release Please GitHub Actions secret for this repository. Go to the repository Settings → Secrets and variables → Actions and create a new repository secret named `PERSONAL_GITHUB_ACCESS_TOKEN`. The token needs `contents: write` and `pull-requests: write` permissions on this repository. If I already have a personal access token with these scopes, use that. Otherwise, guide me to create one at `https://github.com/settings/tokens`."
 
 ### Conventional Commits
 
@@ -173,7 +159,6 @@ Use conventional commit messages for automatic version bumping:
 - **Automated testing** with pytest and coverage
 - **Code formatting** with ruff
 - **Automated releases** with Release Please
-- **AI assistant integration** with Cline configuration
 - **GitHub Actions** workflows for CI/CD
 
 ## Contributing
